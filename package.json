@@ -1,0 +1,45 @@
+{
+  "name": "bravo-challenge",
+  "version": "1.0.0",
+  "description": "This is the backend challenge for @hurbcom developer position",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon -r dotenv/config src/server.js",
+    "format": "prettier --write '**/*.{md,js,json,css}'",
+    "lint": "eslint src --ext .js",
+    "prepare": "husky install",
+    "lint-staged": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{css,md,json}": [
+      "prettier --write"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JPougano/bravo-challenge.git"
+  },
+  "keywords": [],
+  "author": "João Pedro Ougano <pedroougano@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JPougano/bravo-challenge/issues"
+  },
+  "homepage": "https://github.com/JPougano/bravo-challenge#readme",
+  "devDependencies": {
+    "eslint": "^8.39.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.22",
+    "prettier": "^2.8.8"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}
