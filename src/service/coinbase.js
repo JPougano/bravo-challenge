@@ -10,6 +10,7 @@ assert.ok(
 const fetchCurrencyRates = async () => {
   try {
     const { data: rates } = await axios.get(COINBASE_API_URI);
+    console.log("Currency rates successfully collected!");
     return rates;
   } catch (error) {
     throw new Error(`Failed to fetch currency rates: " ${error?.message}`);
