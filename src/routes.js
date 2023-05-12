@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const coinbaseController = require("../src/controller/coinbase");
 
-router.get("/", (req, res) => {
-  res.json({ ola: true });
-});
+router.get("/", coinbaseController.getCurrencyRates);
 
 module.exports = router;
