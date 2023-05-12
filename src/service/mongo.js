@@ -5,7 +5,7 @@ const getDbCount = async () => {
     const count = await Currency.count();
     return count;
   } catch (error) {
-    throw new Error(`Failed to get db count" ${error?.message}`);
+    throw new Error(`Failed to get db count: ${error?.message}`);
   }
 };
 
@@ -21,8 +21,17 @@ const populateDb = async (currencyList) => {
     console.log("Db successfully populated!");
     return insertedData;
   } catch (error) {
-    throw new Error(`Failed to populate db" ${error?.message}`);
+    throw new Error(`Failed to populate db: ${error?.message}`);
   }
 };
 
-module.exports = { getDbCount, populateDb };
+const findCurrency = async (currencies) => {
+  try {
+    const result = await Currency.find({ currency: { $in: currencies } });
+    return result;
+  } catch (error) {
+    throw new Error(`Failed finding currencies: ${error?.message}`);
+  }
+};
+
+module.exports = { getDbCount, populateDb, findCurrency };
