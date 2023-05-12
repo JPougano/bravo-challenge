@@ -23,7 +23,7 @@ const getConvertion = async (req, res) => {
     );
     res.json({ from: from, to: to, amount: amount, conversion: conversion });
   } catch (error) {
-    console.error(conversion || error);
+    console.error(error);
     res
       .status(500)
       .json({ error: true, message: "Failed to get currency conversion" });

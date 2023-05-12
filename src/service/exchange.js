@@ -25,7 +25,7 @@ const convertCurrency = (rateList, from, to, amount) => {
     throw new Error(error);
   }
 
-  const numericRegex = /^[0-9]+$/;
+  const numericRegex = /^(\$)?(\d{1,3}(,\d{3})*|(\d+))(\.\d{1,2})?$/;
   if (!numericRegex.test(amount)) {
     throw new Error("Amount must have only numeric characters");
   }
