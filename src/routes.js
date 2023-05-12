@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const coinbaseController = require("../src/controller/coinbase");
+const exchangeController = require("../src/controller/exchange");
 
-router.get("/", coinbaseController.getCurrencyRates);
+router.get("/currencyConversion", exchangeController.getConvertion);
 
 module.exports = router;
