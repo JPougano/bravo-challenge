@@ -3,6 +3,10 @@ const mongoose = require("mongoose");
 const assert = require("assert");
 const morgan = require("morgan");
 const router = require("./routes");
+const coinbaseService = require("./service/coinbase");
+const mongoService = require("./service/mongo");
+const { splitRates } = require("./utils");
+
 const { SERVER_PORT, DB_CONNECTION_URI } = process.env;
 
 const app = express();
@@ -17,6 +21,15 @@ assert.ok(
   try {
     await mongoose.connect(DB_CONNECTION_URI);
     console.log("Successfully connected to mongoDb");
+
+    const isDbPopulated = Boolean(await mongoService.getDbCount());
+    if (!isDbPopulated) {
+      const {
+        data: { rates },
+      } = await coinbaseService.fetchCurrencyRates();
+      const rateList = splitRates(rates);
+      await mongoService.populateDb(rateList);
+    }
 
     startServer();
   } catch (error) {
