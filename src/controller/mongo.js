@@ -1,5 +1,7 @@
 const mongoService = require("../service/mongo");
 const joiValidation = require("../model/currencyJoi");
+const Redis = require("../../redis");
+const { CURRENCY_RATE_CACHE_KEY } = process.env;
 
 const getCount = async (req, res) => {
   try {
@@ -33,6 +35,9 @@ const createCurrency = async (req, res) => {
     }
 
     const addedCurrency = await mongoService.addCurrency(newCurrency);
+    const allCurrencies = await mongoService.getAllRecords();
+    Redis.set(CURRENCY_RATE_CACHE_KEY, allCurrencies);
+
     res.status(201).json(addedCurrency);
   } catch (error) {
     console.log(error);
