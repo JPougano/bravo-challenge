@@ -7,7 +7,7 @@ const getConvertion = async (req, res) => {
   const { from, to, amount } = req.query;
 
   if (!from || !to || !amount) {
-    res.status(503).json({
+    res.status(404).json({
       error: true,
       message:
         "'from', 'to', and 'amount' must be provided before converting currency",
