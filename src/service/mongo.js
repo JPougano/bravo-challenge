@@ -52,6 +52,23 @@ const addCurrency = async (newCurrency) => {
   }
 };
 
+const updateManyCurrencies = async (data) => {
+  // eslint-disable-next-line no-unused-vars
+  const bulkOps = Object.entries(data).map(([currency, update]) => ({
+    updateOne: {
+      filter: { currency: update.currency },
+      update,
+    },
+  }));
+
+  try {
+    const updatedData = await Currency.bulkWrite(bulkOps, { upsert: true });
+    return updatedData;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 const deleteCurrency = async (currency) => {
   try {
     const deletedCurrency = await Currency.findOneAndDelete({
@@ -69,6 +86,7 @@ module.exports = {
   populateDb,
   findCurrency,
   addCurrency,
+  updateManyCurrencies,
   deleteCurrency,
   getAllRecords,
 };
