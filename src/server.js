@@ -53,12 +53,16 @@ const startServer = () => {
     console.log(`Server up and running on port ${PORT}`);
   });
 
-  process.on("SIGINT", () => {
-    server.close(() => {
-      Redis.quit();
-      mongoose.connection.close();
+  process.on("SIGINT", async () => {
+    try {
+      server.close();
+      await Redis.quit();
+      await mongoose.connection.close();
+      console.log("Server shuted down");
       process.exit(0);
-    });
-    console.log("Server killed");
+    } catch (error) {
+      console.error("Error closing connections:", error);
+      process.exit(1);
+    }
   });
 };
