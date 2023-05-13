@@ -55,6 +55,8 @@ const deleteCurrency = async (req, res) => {
         .json({ error: true, message: "Currency does not exists" });
       return;
     }
+    const allCurrencies = await mongoService.getAllRecords();
+    Redis.set(CURRENCY_RATE_CACHE_KEY, allCurrencies);
     res.status(204).json(deletedCurrency);
   } catch (error) {
     res.status(500).json(error);
