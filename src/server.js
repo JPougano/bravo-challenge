@@ -6,7 +6,7 @@ const router = require("./routes");
 const coinbaseService = require("./service/coinbase");
 const mongoService = require("./service/mongo");
 const { splitRates } = require("./utils");
-const redisClient = require("../redis");
+const Redis = require("../redis");
 
 const { SERVER_PORT, DB_CONNECTION_URI, CURRENCY_RATE_CACHE_KEY } = process.env;
 
@@ -26,7 +26,7 @@ assert.ok(
   try {
     await mongoose.connect(DB_CONNECTION_URI);
     console.log("Successfully connected to mongoDb");
-
+    Redis.connect();
     const isDbPopulated = Boolean(await mongoService.getDbCount());
     if (!isDbPopulated) {
       const {
@@ -34,9 +34,7 @@ assert.ok(
       } = await coinbaseService.fetchCurrencyRates();
       const rateList = splitRates(rates);
       await mongoService.populateDb(rateList);
-      await redisClient.connect();
-      await redisClient.set(CURRENCY_RATE_CACHE_KEY, JSON.stringify(rateList));
-      await redisClient.quit();
+      Redis.set(CURRENCY_RATE_CACHE_KEY, JSON.stringify(rateList));
     }
 
     startServer();
@@ -51,7 +49,16 @@ const startServer = () => {
   app.use(express.json());
   app.use("/", router);
 
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     console.log(`Server up and running on port ${PORT}`);
+  });
+
+  process.on("SIGINT", () => {
+    server.close(() => {
+      Redis.quit();
+      mongoose.connection.close();
+      process.exit(0);
+    });
+    console.log("Server killed");
   });
 };
