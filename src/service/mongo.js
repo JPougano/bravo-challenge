@@ -43,4 +43,22 @@ const addCurrency = async (newCurrency) => {
   }
 };
 
-module.exports = { getDbCount, populateDb, findCurrency, addCurrency };
+const deleteCurrency = async (currency) => {
+  try {
+    const deletedCurrency = await Currency.findOneAndDelete({
+      currency: currency.toUpperCase(),
+    });
+    console.log(deletedCurrency);
+    return deletedCurrency;
+  } catch (error) {
+    throw new Error(`Failed deleting currency: ${error?.message}`);
+  }
+};
+
+module.exports = {
+  getDbCount,
+  populateDb,
+  findCurrency,
+  addCurrency,
+  deleteCurrency,
+};
