@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon -r dotenv/config src/server.js",
+    "start-cron": "nodemon -r dotenv/config cron",
     "format": "prettier --write '**/*.{md,js,json,css}'",
     "lint": "eslint src --ext .js",
     "prepare": "husky install",
@@ -44,6 +45,7 @@
     "husky": "^8.0.3",
     "joi": "^17.9.2",
     "mongoose": "^7.1.1",
+    "node-cron": "^3.0.2",
     "redis": "^4.6.6"
   }
 }
