@@ -6,8 +6,9 @@ const router = require("./routes");
 const coinbaseService = require("./service/coinbase");
 const mongoService = require("./service/mongo");
 const { splitRates } = require("./utils");
+const redisClient = require("../redis");
 
-const { SERVER_PORT, DB_CONNECTION_URI } = process.env;
+const { SERVER_PORT, DB_CONNECTION_URI, CURRENCY_RATE_CACHE_KEY } = process.env;
 
 const app = express();
 const PORT = SERVER_PORT || 5001;
@@ -15,6 +16,10 @@ const PORT = SERVER_PORT || 5001;
 assert.ok(
   DB_CONNECTION_URI,
   "DB_CONNECTION_URI must be provided before using this application"
+);
+assert.ok(
+  CURRENCY_RATE_CACHE_KEY,
+  "CURRENCY_RATE_CACHE_KEY must be provided before using this application"
 );
 
 (async () => {
@@ -29,6 +34,9 @@ assert.ok(
       } = await coinbaseService.fetchCurrencyRates();
       const rateList = splitRates(rates);
       await mongoService.populateDb(rateList);
+      await redisClient.connect();
+      await redisClient.set(CURRENCY_RATE_CACHE_KEY, JSON.stringify(rateList));
+      await redisClient.quit();
     }
 
     startServer();
