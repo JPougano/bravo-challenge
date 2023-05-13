@@ -25,6 +25,15 @@ const populateDb = async (currencyList) => {
   }
 };
 
+const getAllRecords = async () => {
+  try {
+    const result = await Currency.find({});
+    return result;
+  } catch (error) {
+    throw new Error(`Failed finding currencies: ${error?.message}`);
+  }
+};
+
 const findCurrency = async (currencies) => {
   try {
     const result = await Currency.find({ currency: { $in: currencies } });
@@ -61,4 +70,5 @@ module.exports = {
   findCurrency,
   addCurrency,
   deleteCurrency,
+  getAllRecords,
 };
