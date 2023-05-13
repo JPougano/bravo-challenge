@@ -40,4 +40,21 @@ const createCurrency = async (req, res) => {
   }
 };
 
-module.exports = { getCount, createCurrency };
+const deleteCurrency = async (req, res) => {
+  const { currency } = req.query;
+  try {
+    const deletedCurrency = await mongoService.deleteCurrency(currency);
+    if (!deletedCurrency) {
+      res
+        .status(500)
+        .json({ error: true, message: "Currency does not exists" });
+      return;
+    }
+    res.status(204).json(deletedCurrency);
+  } catch (error) {
+    res.status(500).json(error);
+    throw new Error(error);
+  }
+};
+
+module.exports = { getCount, createCurrency, deleteCurrency };
