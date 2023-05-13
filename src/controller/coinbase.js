@@ -7,7 +7,7 @@ const getCurrencyRates = async (req, res) => {
   } catch (error) {
     console.error(error);
     res
-      .status(503)
+      .status(500)
       .json({ error: true, message: "Failed to fetch currency rates" });
   }
 };
