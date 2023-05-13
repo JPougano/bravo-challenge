@@ -11,8 +11,6 @@ const convertCurrency = (rateList, { from, to, amount }) => {
     const fromData = rateList.filter((cur) => cur.currency === from);
     const toData = rateList.filter((cur) => cur.currency === to);
 
-    console.log("XXXXXXXXXXXXXXXXXXXXXXXx", fromData, toData);
-
     let error;
     if (fromData.length === 0) {
       error = `Please, check if '${from}' exists`;
