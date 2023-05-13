@@ -6,10 +6,12 @@
  * @amount Qty of money to be converted
  * @returns {Number}
  */
-const convertCurrency = (rateList, from, to, amount) => {
+const convertCurrency = (rateList, { from, to, amount }) => {
   if (rateList.length < 2) {
     const fromData = rateList.filter((cur) => cur.currency === from);
     const toData = rateList.filter((cur) => cur.currency === to);
+
+    console.log("XXXXXXXXXXXXXXXXXXXXXXXx", fromData, toData);
 
     let error;
     if (fromData.length === 0) {

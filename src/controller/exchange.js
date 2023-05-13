@@ -3,6 +3,13 @@ const mongoService = require("../service/mongo");
 
 const getConvertion = async (req, res) => {
   const { from, to, amount } = req.query;
+
+  const dataToConvert = {
+    from: from.toUpperCase(),
+    to: to.toUpperCase(),
+    amount: amount,
+  };
+
   let conversion;
 
   if (!from || !to || !amount) {
@@ -14,14 +21,17 @@ const getConvertion = async (req, res) => {
     return;
   }
   try {
-    const currecyRates = await mongoService.findCurrency([from, to]);
-    conversion = exchangeService.convertCurrency(
-      currecyRates,
-      from,
-      to,
-      amount
-    );
-    res.json({ from: from, to: to, amount: amount, conversion: conversion });
+    const currecyRates = await mongoService.findCurrency([
+      dataToConvert.from,
+      dataToConvert.to,
+    ]);
+    conversion = exchangeService.convertCurrency(currecyRates, dataToConvert);
+    res.json({
+      from: dataToConvert.from,
+      to: dataToConvert.to,
+      amount: amount,
+      conversion: conversion,
+    });
   } catch (error) {
     console.error(error);
     res
