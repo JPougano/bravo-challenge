@@ -1,4 +1,4 @@
-const Currency = require("../model/currency");
+const Currency = require("../model/currencySchema");
 
 const getDbCount = async () => {
   try {
@@ -34,4 +34,13 @@ const findCurrency = async (currencies) => {
   }
 };
 
-module.exports = { getDbCount, populateDb, findCurrency };
+const addCurrency = async (newCurrency) => {
+  try {
+    const result = await Currency.create(newCurrency);
+    return result;
+  } catch (error) {
+    throw new Error(`Failed finding currencies: ${error?.message}`);
+  }
+};
+
+module.exports = { getDbCount, populateDb, findCurrency, addCurrency };
