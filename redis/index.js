@@ -21,7 +21,7 @@ class Redis {
   };
 
   set = async (key, value) => {
-    await redisClient.set(key, value);
+    await redisClient.set(key, JSON.stringify(value));
   };
 }
 
