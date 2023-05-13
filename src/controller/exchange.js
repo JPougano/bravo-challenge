@@ -1,6 +1,6 @@
 const exchangeService = require("../service/exchange");
 const mongoService = require("../service/mongo");
-const redisClient = require("../../redis");
+const Redis = require("../../redis");
 const { CURRENCY_RATE_CACHE_KEY } = process.env;
 
 const getConvertion = async (req, res) => {
@@ -21,9 +21,7 @@ const getConvertion = async (req, res) => {
     amount: amount,
   };
 
-  await redisClient.connect();
-  const cachedData = await redisClient.get(CURRENCY_RATE_CACHE_KEY);
-  await redisClient.quit();
+  const cachedData = await Redis.get(CURRENCY_RATE_CACHE_KEY);
 
   let conversion;
 

@@ -1,27 +1,28 @@
-const redis = require("redis");
-const assert = require("assert");
-const { REDIS_HOST, REDIS_PORT } = process.env;
+const redisClient = require("./redisClient");
 
-assert.ok(
-  REDIS_HOST,
-  "REDIS_HOST must be provided before using this application"
-);
-assert.ok(
-  REDIS_PORT,
-  "REDIS_PORT must be provided before using this application"
-);
+class Redis {
+  constructor() {
+    if (Redis.instance) {
+      return Redis.instance;
+    }
+    Redis.instance = this;
+  }
+  connect = async () => {
+    await redisClient.connect();
+  };
 
-const redisClient = redis.createClient({
-  host: REDIS_HOST,
-  port: REDIS_PORT,
-});
+  quit = async () => {
+    await redisClient.quit();
+  };
 
-redisClient.on("connect", () => {
-  console.log("Redis client connected");
-});
+  get = async (key) => {
+    const cachedData = await redisClient.get(key);
+    return cachedData;
+  };
 
-redisClient.on("error", (error) => {
-  console.error("Redis connection error:", error);
-});
+  set = async (key, value) => {
+    await redisClient.set(key, value);
+  };
+}
 
-module.exports = redisClient;
+module.exports = new Redis();
