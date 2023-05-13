@@ -33,6 +33,10 @@ const convertCurrency = (rateList, { from, to, amount }) => {
   const fromData = rateList.filter((cur) => cur.currency === from);
   const toData = rateList.filter((cur) => cur.currency === to);
 
+  if (fromData.length === 0 || toData.length === 0) {
+    throw new Error(`Check if both 'from' and 'to' exists`);
+  }
+
   const fromRate = parseFloat(fromData[0].rate);
   const toRate = parseFloat(toData[0].rate);
 
