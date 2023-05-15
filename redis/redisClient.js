@@ -1,19 +1,14 @@
 const redis = require("redis");
 const assert = require("assert");
-const { REDIS_HOST, REDIS_PORT } = process.env;
+const { REDIS_CONNECTION_URL } = process.env;
 
 assert.ok(
-  REDIS_HOST,
-  "REDIS_HOST must be provided before using this application"
-);
-assert.ok(
-  REDIS_PORT,
-  "REDIS_PORT must be provided before using this application"
+  REDIS_CONNECTION_URL,
+  "REDIS_CONNECTION_URL must be provided before using this application"
 );
 
 const redisClient = redis.createClient({
-  host: REDIS_HOST,
-  port: REDIS_PORT,
+  url: REDIS_CONNECTION_URL,
 });
 
 redisClient.on("connect", () => {
