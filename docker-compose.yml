@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+  app:
+    container_name: bravo-server
+    restart: always
+    build: .
+    command: npm start
+    ports:
+      - "5001:5001"
+    networks:
+      - bravonetwork
+    volumes:
+      - ./src:/usr/app/src
+    depends_on:
+      - bravo-redis
+  redis:
+    image: redis:6.0.7
+    container_name: bravo-redis
+    ports:
+      - "6379:6379"
+    command: redis-server
+    networks:
+      - bravonetwork
+  mongo:
+    image: mongo
+    container_name: bravo-mongo
+    ports:
+      - "27017:27018"
+    networks:
+      - bravonetwork
+  cron:
+    container_name: bravo-cron
+    restart: always
+    build: .
+    command: npm run start-cron
+    ports:
+      - "5101:10510"
+    networks:
+      - bravonetwork
+    volumes:
+      - .:/usr/app/cron/updateDb
+
+networks:
+  bravonetwork:
+    driver: bridge
