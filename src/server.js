@@ -2,32 +2,18 @@ const express = require("express");
 const mongoose = require("mongoose");
 const assert = require("assert");
 const morgan = require("morgan");
-const fs = require("fs");
 const router = require("./routes");
 const coinbaseService = require("./service/coinbase");
 const mongoService = require("./service/mongo");
 const { splitRates } = require("./utils");
 const Redis = require("../redis");
+const CONFIG = require("../config");
 
-const {
-  SERVER_PORT,
-  DB_CONNECTION_URI,
-  DB_CONNECTION_URI_DEV,
-  CURRENCY_RATE_CACHE_KEY,
-} = process.env;
-
-const isRunningInContainer =
-  fs.existsSync("/.dockerenv") ||
-  fs.existsSync("/run/.containerenv") ||
-  fs.existsSync("/.sap_btp_in_docker");
+const { SERVER_PORT, CURRENCY_RATE_CACHE_KEY } = process.env;
 
 const app = express();
 const PORT = SERVER_PORT || 5001;
 
-assert.ok(
-  DB_CONNECTION_URI,
-  "DB_CONNECTION_URI must be provided before using this application"
-);
 assert.ok(
   CURRENCY_RATE_CACHE_KEY,
   "CURRENCY_RATE_CACHE_KEY must be provided before using this application"
@@ -35,9 +21,7 @@ assert.ok(
 
 (async () => {
   try {
-    await mongoose.connect(
-      isRunningInContainer ? DB_CONNECTION_URI : DB_CONNECTION_URI_DEV
-    );
+    await mongoose.connect(CONFIG.DB_CONNECTION_URI);
     console.log("Successfully connected to mongoDb");
     Redis.connect();
     const isDbPopulated = Boolean(await mongoService.getDbCount());
