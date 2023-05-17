@@ -23,7 +23,7 @@ const logger = () => {
     }),
   ];
 
-  if (NODE_ENV === "development") {
+  if (NODE_ENV === "container") {
     transportArray.push(
       new transports.MongoDB({
         level: "warn",
