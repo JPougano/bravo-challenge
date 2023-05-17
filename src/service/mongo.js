@@ -74,7 +74,7 @@ const updateManyCurrencies = async (data) => {
 const deleteCurrency = async (currency) => {
   try {
     const deletedCurrency = await Currency.findOneAndDelete({
-      currency: currency.toUpperCase(),
+      currency: currency?.toUpperCase(),
     });
     return deletedCurrency;
   } catch (error) {
