@@ -1,7 +1,6 @@
 const assert = require("assert");
 const { NODE_ENV } = process.env;
 
-const isRunningInContainer = NODE_ENV === "development" ? false : true;
 assert.ok(NODE_ENV, "NODE_ENV must be provided before using this application");
 
 assert.ok(
@@ -14,6 +13,7 @@ assert.ok(
   "DB_CONNECTION_URI must be provided before using this application"
 );
 
+const isRunningInContainer = NODE_ENV === "development" ? false : true;
 const containerEnvs = {
   DB_CONNECTION_URI: process.env.DB_CONNECTION_URI,
   REDIS_CONNECTION_URL: { url: process.env.REDIS_CONNECTION_URL },
