@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "NODE_ENV=development nodemon -r dotenv/config src/server.js",
     "start": "NODE_ENV=container nodemon -r dotenv/config src/server.js",
-    "start-cron": "nodemon -r dotenv/config cron",
+    "start-cron": "NODE_ENV=container nodemon -r dotenv/config cron",
+    "dev-cron": "NODE_ENV=development nodemon -r dotenv/config cron",
     "format": "prettier --write '**/*.{md,js,json,css}'",
     "lint": "eslint src --ext .js",
     "prepare": "husky install",
@@ -49,6 +50,7 @@
     "mongoose": "^7.1.1",
     "node-cron": "^3.0.2",
     "redis": "^4.6.6",
-    "winston": "^3.8.2"
+    "winston": "^3.8.2",
+    "winston-mongodb": "^5.1.1"
   }
 }
