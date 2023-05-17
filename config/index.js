@@ -1,10 +1,8 @@
-const fs = require("fs");
 const assert = require("assert");
+const { NODE_ENV } = process.env;
 
-const isRunningInContainer =
-  fs.existsSync("/.dockerenv") ||
-  fs.existsSync("/run/.containerenv") ||
-  fs.existsSync("/.sap_btp_in_docker");
+const isRunningInContainer = NODE_ENV === "development" ? false : true;
+assert.ok(NODE_ENV, "NODE_ENV must be provided before using this application");
 
 assert.ok(
   process.env.REDIS_CONNECTION_URL,
