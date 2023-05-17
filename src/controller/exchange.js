@@ -13,12 +13,17 @@ const getConvertion = async (req, res) => {
       message:
         "'from', 'to', and 'amount' must be provided before converting currency",
     });
+    logger.warn("Tryied to convert currency without proper query", {
+      from: from,
+      to: to,
+      amount: amount,
+    });
     return;
   }
 
   const dataToConvert = {
-    from: from.toUpperCase(),
-    to: to.toUpperCase(),
+    from: from?.toUpperCase(),
+    to: to?.toUpperCase(),
     amount: amount,
   };
 
@@ -40,6 +45,7 @@ const getConvertion = async (req, res) => {
         conversion: conversion,
         fromCahe: true,
       });
+      logger.warn("Conversion successfully acomplished");
     } catch (error) {
       logger.error(error);
       res

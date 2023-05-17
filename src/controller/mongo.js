@@ -18,13 +18,17 @@ const createCurrency = async (req, res) => {
   const { currency, rate } = req.body;
 
   const newCurrency = {
-    currency: currency.toUpperCase(),
+    currency: currency?.toUpperCase(),
     rate: rate,
   };
-
   const { error } = joiValidation.validate(newCurrency);
+
   if (error) {
     res.status(400).json(error.details);
+    logger.warn("Tryied to create currency, but didn't validate", {
+      currency: currency,
+      rate: rate,
+    });
     throw new Error(error);
   }
 
@@ -32,13 +36,18 @@ const createCurrency = async (req, res) => {
     const currencyExist = await mongoService.findCurrency(newCurrency.currency);
     if (currencyExist.length != 0) {
       res.status(500).json({ error: true, message: "Currency already exists" });
+      logger.warn(
+        "Tryied to create currency, but it already exists",
+        newCurrency
+      );
+
       return;
     }
 
     const addedCurrency = await mongoService.addCurrency(newCurrency);
+    logger.warn("currency added", addedCurrency);
     const allCurrencies = await mongoService.getAllRecords();
     Redis.set(CURRENCY_RATE_CACHE_KEY, allCurrencies);
-    logger.info("currency added", addedCurrency);
 
     res.status(201).json(addedCurrency);
   } catch (error) {
@@ -55,12 +64,14 @@ const deleteCurrency = async (req, res) => {
       res
         .status(500)
         .json({ error: true, message: "Currency does not exists" });
+      logger.warn("Tried to delete currency, but it doesn't exists", currency);
+
       return;
     }
     const allCurrencies = await mongoService.getAllRecords();
     Redis.set(CURRENCY_RATE_CACHE_KEY, allCurrencies);
     res.status(204).json(deletedCurrency);
-    logger.info("currency deleted", deletedCurrency);
+    logger.warn("currency deleted", deletedCurrency);
   } catch (error) {
     res.status(500).json(error);
     throw new Error(error);
