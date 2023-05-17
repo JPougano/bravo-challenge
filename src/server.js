@@ -23,6 +23,8 @@ assert.ok(
 (async () => {
   try {
     await mongoose.connect(CONFIG.DB_CONNECTION_URI);
+    await mongoose.createConnection(CONFIG.DB_CONNECTION_URI_LOGGER);
+
     logger.info("Successfully connected to mongoDb");
     Redis.connect();
     const isDbPopulated = Boolean(await mongoService.getDbCount());
@@ -55,7 +57,10 @@ const startServer = () => {
     try {
       server.close();
       await Redis.quit();
-      await mongoose.connection.close();
+      await Promise.all([
+        mongoose.connection.close(),
+        mongoose.connections[0].close(),
+      ]);
       logger.debug("Server shuted down");
       process.exit(0);
     } catch (error) {
