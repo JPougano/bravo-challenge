@@ -8,6 +8,7 @@ const mongoService = require("./service/mongo");
 const { splitRates } = require("./utils");
 const Redis = require("../redis");
 const CONFIG = require("../config");
+const logger = require("../logger");
 
 const { SERVER_PORT, CURRENCY_RATE_CACHE_KEY } = process.env;
 
@@ -22,7 +23,7 @@ assert.ok(
 (async () => {
   try {
     await mongoose.connect(CONFIG.DB_CONNECTION_URI);
-    console.log("Successfully connected to mongoDb");
+    logger.info("Successfully connected to mongoDb");
     Redis.connect();
     const isDbPopulated = Boolean(await mongoService.getDbCount());
     if (!isDbPopulated) {
@@ -36,7 +37,7 @@ assert.ok(
 
     startServer();
   } catch (error) {
-    console.error("Error setting up server:", error);
+    logger.error("Error setting up server:", error);
     process.exit(1);
   }
 })();
@@ -47,7 +48,7 @@ const startServer = () => {
   app.use("/", router);
 
   const server = app.listen(PORT, () => {
-    console.log(`Server up and running on port ${PORT}`);
+    logger.info(`Server up and running on port ${PORT}`);
   });
 
   process.on("SIGINT", async () => {
@@ -55,10 +56,10 @@ const startServer = () => {
       server.close();
       await Redis.quit();
       await mongoose.connection.close();
-      console.log("Server shuted down");
+      logger.debug("Server shuted down");
       process.exit(0);
     } catch (error) {
-      console.error("Error closing connections:", error);
+      logger.error("Error closing connections:", error);
       process.exit(1);
     }
   });
