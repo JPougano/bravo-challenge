@@ -32,7 +32,7 @@ assert.ok(
       } = await coinbaseService.fetchCurrencyRates();
       const rateList = splitRates(rates);
       await mongoService.populateDb(rateList);
-      Redis.set(CURRENCY_RATE_CACHE_KEY, JSON.stringify(rateList));
+      Redis.set(CURRENCY_RATE_CACHE_KEY, rateList);
     }
 
     startServer();
