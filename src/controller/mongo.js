@@ -1,6 +1,7 @@
 const mongoService = require("../service/mongo");
 const joiValidation = require("../model/currencyJoi");
 const Redis = require("../../redis");
+const logger = require("../../logger");
 const { CURRENCY_RATE_CACHE_KEY } = process.env;
 
 const getCount = async (req, res) => {
@@ -8,7 +9,7 @@ const getCount = async (req, res) => {
     const count = await mongoService.getDbCount();
     res.status(200).json(count);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(404).json(error);
   }
 };
@@ -37,10 +38,11 @@ const createCurrency = async (req, res) => {
     const addedCurrency = await mongoService.addCurrency(newCurrency);
     const allCurrencies = await mongoService.getAllRecords();
     Redis.set(CURRENCY_RATE_CACHE_KEY, allCurrencies);
+    logger.info("currency added", addedCurrency);
 
     res.status(201).json(addedCurrency);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(404).json(error);
   }
 };
@@ -58,6 +60,7 @@ const deleteCurrency = async (req, res) => {
     const allCurrencies = await mongoService.getAllRecords();
     Redis.set(CURRENCY_RATE_CACHE_KEY, allCurrencies);
     res.status(204).json(deletedCurrency);
+    logger.info("currency deleted", deletedCurrency);
   } catch (error) {
     res.status(500).json(error);
     throw new Error(error);

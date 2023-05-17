@@ -1,6 +1,7 @@
 const exchangeService = require("../service/exchange");
 const mongoService = require("../service/mongo");
 const Redis = require("../../redis");
+const logger = require("../../logger");
 const { CURRENCY_RATE_CACHE_KEY } = process.env;
 
 const getConvertion = async (req, res) => {
@@ -40,7 +41,7 @@ const getConvertion = async (req, res) => {
         fromCahe: true,
       });
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       res
         .status(500)
         .json({ error: true, message: "Failed to get currency conversion" });
@@ -62,7 +63,7 @@ const getConvertion = async (req, res) => {
       fromCahe: false,
     });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res
       .status(500)
       .json({ error: true, message: "Failed to get currency conversion" });
