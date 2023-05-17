@@ -4,12 +4,13 @@ const coinbaseService = require("../src/service/coinbase");
 const mongoService = require("../src/service/mongo");
 const Redis = require("../redis");
 const { splitRates } = require("../src/utils");
+const logger = require("../logger");
 const { CRON_SCHEDULE, DB_CONNECTION_URI, CURRENCY_RATE_CACHE_KEY } =
   process.env;
 
 (async () => {
   await mongoose.connect(DB_CONNECTION_URI);
-  console.log("Mongodb connected");
+  logger.info("Mongodb connected");
   await Redis.connect();
 })();
 
@@ -23,11 +24,11 @@ cron.schedule(CRON_SCHEDULE, async () => {
       await mongoService.updateManyCurrencies(rateList);
     const allCurrencies = await mongoService.getAllRecords();
     await Redis.set(CURRENCY_RATE_CACHE_KEY, allCurrencies);
-    console.log(
+    logger.warn(
       `${matchedCount} documents found. ${modifiedCount} documents updated`
     );
   } catch (error) {
-    console.error("Error setting up cron job:", error);
+    logger.error("Error setting up cron job:", error);
     process.exit(1);
   }
 });
@@ -36,10 +37,10 @@ process.on("SIGINT", async () => {
   try {
     await Redis.quit();
     await mongoose.connection.close();
-    console.log("Cronjob shuted down");
+    logger.debug("Cronjob shuted down");
     process.exit(0);
   } catch (error) {
-    console.error("Error shutting server down:", error);
+    logger.error("Error shutting server down:", error);
     process.exit(1);
   }
 });
