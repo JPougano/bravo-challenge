@@ -1,4 +1,5 @@
 const Currency = require("../model/currencySchema");
+const logger = require("../../logger");
 
 const getDbCount = async () => {
   try {
@@ -18,7 +19,7 @@ const getDbCount = async () => {
 const populateDb = async (currencyList) => {
   try {
     const insertedData = await Currency.create(currencyList);
-    console.log("Db successfully populated!");
+    logger.info("Db successfully populated!");
     return insertedData;
   } catch (error) {
     throw new Error(`Failed to populate db: ${error?.message}`);
@@ -28,6 +29,7 @@ const populateDb = async (currencyList) => {
 const getAllRecords = async () => {
   try {
     const result = await Currency.find({});
+    logger.debug("All records collected");
     return result;
   } catch (error) {
     throw new Error(`Failed finding currencies: ${error?.message}`);
@@ -74,7 +76,6 @@ const deleteCurrency = async (currency) => {
     const deletedCurrency = await Currency.findOneAndDelete({
       currency: currency.toUpperCase(),
     });
-    console.log(deletedCurrency);
     return deletedCurrency;
   } catch (error) {
     throw new Error(`Failed deleting currency: ${error?.message}`);
