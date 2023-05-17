@@ -9,7 +9,7 @@ const getCount = async (req, res) => {
     const count = await mongoService.getDbCount();
     res.status(200).json(count);
   } catch (error) {
-    logger.error(error);
+    logger.error(`Error getting dbCount ${error}`);
     res.status(404).json(error);
   }
 };
@@ -51,7 +51,7 @@ const createCurrency = async (req, res) => {
 
     res.status(201).json(addedCurrency);
   } catch (error) {
-    logger.error(error);
+    logger.error(`Error creating currency: ${error}`);
     res.status(404).json(error);
   }
 };
