@@ -1,4 +1,5 @@
 const redisClient = require("./redisClient");
+const logger = require("../logger");
 
 class Redis {
   constructor() {
@@ -17,11 +18,13 @@ class Redis {
 
   get = async (key) => {
     const cachedData = await redisClient.get(key);
+    logger.info("Cache hitted", key);
     return cachedData;
   };
 
   set = async (key, value) => {
     await redisClient.set(key, JSON.stringify(value));
+    logger.info("Cache hitted", { key, value });
   };
 }
 
