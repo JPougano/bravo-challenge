@@ -4,11 +4,11 @@ This is the backend challenge for @hurbcom developer position and might be, also
 
 ## Sumary
 
-[Description](#description)
-[Requisites](#requisites)
-[Running the project](#running-the-project)
-[Expected behavior](#expected-behavior)
-[Usage](#usage)
+- [Description](#description)
+- [Requisites](#requisites)
+- [Running the project](#running-the-project)
+- [Expected behavior](#expected-behavior)
+- [Usage](#usage)
 
 ## Description
 
