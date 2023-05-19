@@ -57,7 +57,7 @@ const createCurrency = async (req, res) => {
 };
 
 const deleteCurrency = async (req, res) => {
-  const { currency } = req.query;
+  const { currency } = req.params;
   try {
     const deletedCurrency = await mongoService.deleteCurrency(currency);
     if (!deletedCurrency) {

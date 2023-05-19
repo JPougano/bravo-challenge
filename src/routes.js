@@ -5,6 +5,6 @@ const mongoController = require("../src/controller/mongo");
 
 router.get("/currencyConversion", exchangeController.getConvertion);
 router.post("/currencyAddition", mongoController.createCurrency);
-router.delete("/currencyDeletion", mongoController.deleteCurrency);
+router.delete("/currencyDeletion/:currency", mongoController.deleteCurrency);
 
 module.exports = router;
