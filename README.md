@@ -2,6 +2,14 @@
 
 This is the backend challenge for @hurbcom developer position and might be, also, used as a portifolio
 
+## Sumary
+
+[Description](#description)
+[Requisites](#requisites)
+[Running the project](#running-the-project)
+[Expected behavior](#expected-behavior)
+[Usage](#usage)
+
 ## Description
 
 The goal of this application is to proccess currency conversion, based on this major goals:
@@ -19,7 +27,7 @@ The goal of this application is to proccess currency conversion, based on this m
 
 1. git clone this project
 2. `cd` into the project folder
-3. Make sure ports: "27017", "6379", "5001", "105001" are not being used. If so, you can kill these ports with `sudo kill -9 $(sudo lsof -t -i:<PORT>)`
+3. Make sure ports: `27017`, `6379`, `5001`, `105001` are not being used. If so, you can kill these ports with `sudo kill -9 $(sudo lsof -t -i:<PORT>)`
 4. Build de container orchestration `docker compose up --build`
 
 ## Expected behavior
