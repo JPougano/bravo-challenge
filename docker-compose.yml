@@ -27,6 +27,7 @@ services:
     container_name: bravo-mongo
     ports:
       - "27017:27017"
+    command: sh -c 'if [ ! -d "/data/db" ]; then mkdir -p /data/db; fi && mongod --bind_ip_all'
     volumes:
     - ./mongo-data:/data/db
     networks:
