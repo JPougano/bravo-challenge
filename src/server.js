@@ -25,7 +25,7 @@ assert.ok(
     await mongoose.connect(CONFIG.DB_CONNECTION_URI);
     await mongoose.createConnection(CONFIG.DB_CONNECTION_URI_LOGGER);
 
-    logger.info("Successfully connected to mongoDb");
+    logger.debug("Successfully connected to mongoDb");
     Redis.connect();
     const isDbPopulated = Boolean(await mongoService.getDbCount());
     if (!isDbPopulated) {
@@ -50,7 +50,7 @@ const startServer = () => {
   app.use("/", router);
 
   const server = app.listen(PORT, () => {
-    logger.info(`Server up and running on port ${PORT}`);
+    logger.debug(`Server up and running on port ${PORT}`);
   });
 
   process.on("SIGINT", async () => {

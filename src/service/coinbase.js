@@ -14,6 +14,7 @@ const fetchCurrencyRates = async () => {
     logger.info("Currency rates successfully collected!");
     return rates;
   } catch (error) {
+    logger.error(`Failed to fetch currency rates: ${error}`);
     throw new Error(`Failed to fetch currency rates: " ${error?.message}`);
   }
 };

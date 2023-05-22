@@ -45,7 +45,7 @@ const createCurrency = async (req, res) => {
     }
 
     const addedCurrency = await mongoService.addCurrency(newCurrency);
-    logger.warn("currency added", addedCurrency);
+    logger.info("currency added", addedCurrency);
     const allCurrencies = await mongoService.getAllRecords();
     Redis.set(CURRENCY_RATE_CACHE_KEY, allCurrencies);
 
@@ -71,7 +71,7 @@ const deleteCurrency = async (req, res) => {
     const allCurrencies = await mongoService.getAllRecords();
     Redis.set(CURRENCY_RATE_CACHE_KEY, allCurrencies);
     res.status(204).json(deletedCurrency);
-    logger.warn("currency deleted", deletedCurrency);
+    logger.info("currency deleted", deletedCurrency);
   } catch (error) {
     res.status(500).json(error);
     throw new Error(error);

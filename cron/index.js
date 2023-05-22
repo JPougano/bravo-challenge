@@ -10,7 +10,7 @@ const { CRON_SCHEDULE, CURRENCY_RATE_CACHE_KEY } = process.env;
 
 (async () => {
   await mongoose.connect(CONFIG.DB_CONNECTION_URI);
-  logger.info("Mongodb connected");
+  logger.debug("Mongodb connected");
   await Redis.connect();
 })();
 
@@ -23,7 +23,7 @@ cron.schedule(CRON_SCHEDULE, async () => {
     const { modifiedCount, matchedCount } =
       await mongoService.updateManyCurrencies(rateList);
     const allCurrencies = await mongoService.getAllRecords();
-    logger.warn(
+    logger.info(
       `${matchedCount} documents found. ${modifiedCount} documents updated`
     );
     await Redis.set(CURRENCY_RATE_CACHE_KEY, allCurrencies);

@@ -19,7 +19,7 @@ const getDbCount = async () => {
 const populateDb = async (currencyList) => {
   try {
     const insertedData = await Currency.create(currencyList);
-    logger.info("Db successfully populated!");
+    logger.debug("Db successfully populated!");
     return insertedData;
   } catch (error) {
     throw new Error(`Failed to populate db: ${error?.message}`);

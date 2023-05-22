@@ -45,7 +45,7 @@ const getConvertion = async (req, res) => {
         conversion: conversion,
         fromCahe: true,
       });
-      logger.warn("Conversion successfully acomplished", dataToConvert);
+      logger.info("Conversion successfully acomplished", dataToConvert);
     } catch (error) {
       logger.error(`Error convertion currency: ${error}`);
       res
