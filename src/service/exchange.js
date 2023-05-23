@@ -43,7 +43,7 @@ const convertCurrency = (rateList, { from, to, amount }) => {
   const backingConversion = parseFloat(amount / fromRate);
   const backedTo = parseFloat(backingConversion * toRate);
 
-  return backedTo;
+  return parseFloat(backedTo?.toFixed(2));
 };
 
 module.exports = { convertCurrency };
